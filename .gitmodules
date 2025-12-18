@@ -1,0 +1,9 @@
+[submodule "auth-services"]
+	path = auth-services
+	url = git@github.com:ahmenglabs/auth-services.git
+[submodule "crud-services"]
+	path = crud-services
+	url = git@github.com:ahmenglabs/crud-services.git
+[submodule "marketplace-frontend"]
+	path = marketplace-frontend
+	url = git@github.com:ahmenglabs/marketplace-frontend.git
