@@ -33,4 +33,7 @@ Run di folder root.
 npm run dev
 ```
 
+ini buat push manual
+```bash
 git push origin HEAD:main
+```
