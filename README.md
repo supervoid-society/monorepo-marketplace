@@ -5,5 +5,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ## Update submodules
 
 ```bash
-git submodule update --remote --merge
+git submodule sync --recursive
+git submodule update --init --recursive
 ```
