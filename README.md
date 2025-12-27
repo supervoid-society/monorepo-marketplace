@@ -32,3 +32,5 @@ Run di folder root.
 ```bash
 npm run dev
 ```
+
+git push origin HEAD:main
