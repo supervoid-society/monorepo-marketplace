@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "dev": "concurrently \"cd auth-services && npm run dev\" \"cd crud-services && npm run dev\" \"cd marketplace-frontend && npm run dev\""
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
