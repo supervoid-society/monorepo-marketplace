@@ -40,6 +40,15 @@ jobs:
         run: npm run build
         working-directory: ${{ matrix.service }}
 
+      - name: Verify Token
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN is EMPTY or NOT FOUND. Check GitHub Repo Settings > Secrets."
+            exit 1
+          else
+            echo "Token found (length: ${#CLOUDFLARE_API_TOKEN})"
+          fi
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
