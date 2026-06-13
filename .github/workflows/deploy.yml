@@ -52,18 +52,20 @@ jobs:
             echo "Token found (length: ${#CLOUDFLARE_API_TOKEN})"
           fi
 
+      - name: Prepare Deployment Arguments
+        id: prep
+        run: |
+          if [ "${{ matrix.service }}" == "marketplace-frontend" ]; then
+            echo "args=--var VITE_AUTH_SERVICE_URL:${{ secrets.VITE_AUTH_SERVICE_URL }} --var VITE_CRUD_SERVICE_URL:${{ secrets.VITE_CRUD_SERVICE_URL }}" >> $GITHUB_OUTPUT
+          else
+            echo "args=--var JWT_SECRET:${{ secrets.JWT_SECRET }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ${{ matrix.service }}
-          command: |
-            VARS=""
-            if [ "${{ matrix.service }}" == "marketplace-frontend" ]; then
-              VARS="--var VITE_AUTH_SERVICE_URL:${{ secrets.VITE_AUTH_SERVICE_URL }} --var VITE_CRUD_SERVICE_URL:${{ secrets.VITE_CRUD_SERVICE_URL }}"
-            else
-              VARS="--var JWT_SECRET:${{ secrets.JWT_SECRET }}"
-            fi
-            deploy $VARS --minify
+          command: deploy ${{ steps.prep.outputs.args }} --minify
 
 
