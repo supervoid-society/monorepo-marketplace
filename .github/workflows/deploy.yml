@@ -14,11 +14,17 @@ jobs:
       matrix:
         include:
           - service: auth-services
+            name: auth-services
             entry_point: src/index.ts
+            comp_date: "2025-12-14"
           - service: crud-services
+            name: crud-services
             entry_point: src/index.ts
+            comp_date: "2025-12-14"
           - service: marketplace-frontend
+            name: marketplace-frontend
             entry_point: worker/index.js
+            comp_date: "2025-12-13"
     
     steps:
       - name: Checkout
@@ -63,6 +69,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ${{ matrix.service }}
-          command: deploy ${{ matrix.entry_point }} ${{ steps.prep.outputs.args }} --minify
-
-
+          command: deploy ${{ matrix.entry_point }} --name ${{ matrix.name }} --compatibility-date ${{ matrix.comp_date }} ${{ steps.prep.outputs.args }} --minify
