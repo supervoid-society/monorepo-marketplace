@@ -8,8 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
     strategy:
       matrix:
         include:
@@ -46,27 +44,15 @@ jobs:
         run: npm run build
         working-directory: ${{ matrix.service }}
 
-      - name: Verify Token
-        run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-            echo "::error::CLOUDFLARE_API_TOKEN is EMPTY or NOT FOUND. Check GitHub Repo Settings > Secrets."
-            exit 1
-          else
-            echo "Token found (length: ${#CLOUDFLARE_API_TOKEN})"
-          fi
-
-      - name: Prepare Deployment Arguments
-        id: prep
-        run: |
-          if [ "${{ matrix.service }}" == "marketplace-frontend" ]; then
-            echo "args=--var VITE_AUTH_SERVICE_URL:${{ secrets.VITE_AUTH_SERVICE_URL }} --var VITE_CRUD_SERVICE_URL:${{ secrets.VITE_CRUD_SERVICE_URL }}" >> $GITHUB_OUTPUT
-          else
-            echo "args=--var JWT_SECRET:${{ secrets.JWT_SECRET }}" >> $GITHUB_OUTPUT
-          fi
-
       - name: Deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ${{ matrix.service }}
-          command: deploy ${{ matrix.entry_point }} --name ${{ matrix.name }} --compatibility-date ${{ matrix.comp_date }} ${{ steps.prep.outputs.args }} --minify
+        run: |
+          npx wrangler deploy ${{ matrix.entry_point }} \
+            --name ${{ matrix.name }} \
+            --compatibility-date ${{ matrix.comp_date }} \
+            --var VITE_AUTH_SERVICE_URL:"${{ secrets.VITE_AUTH_SERVICE_URL }}" \
+            --var VITE_CRUD_SERVICE_URL:"${{ secrets.VITE_CRUD_SERVICE_URL }}" \
+            --var JWT_SECRET:"${{ secrets.JWT_SECRET || secrets.JWT_SECRETS }}" \
+            --minify
+        working-directory: ${{ matrix.service }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
