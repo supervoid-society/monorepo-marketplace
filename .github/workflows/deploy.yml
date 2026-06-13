@@ -12,11 +12,11 @@ jobs:
       matrix:
         include:
           - service: auth-services
-            command: deploy --minify
+            command: deploy src/index.ts --minify
           - service: crud-services
-            command: deploy --minify
+            command: deploy src/index.ts --minify
           - service: marketplace-frontend
-            command: deploy
+            command: deploy worker/index.js
     
     steps:
       - name: Checkout
