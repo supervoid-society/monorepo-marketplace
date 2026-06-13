@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "concurrently \"cd auth-services && npm run dev\" \"cd crud-services && npm run dev\" \"cd marketplace-frontend && npm run dev\""
+    "dev": "concurrently \"cd auth-services && npm run dev\" \"cd crud-services && npm run dev\" \"cd marketplace-frontend && npm run dev\"",
+    "deploy": "concurrently \"cd auth-services && npm run deploy\" \"cd crud-services && npm run deploy\" \"cd marketplace-frontend && npm run deploy\""
   },
   "dependencies": {
     "concurrently": "^9.2.1"
