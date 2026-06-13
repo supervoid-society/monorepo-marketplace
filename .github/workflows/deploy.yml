@@ -14,10 +14,13 @@ jobs:
       matrix:
         include:
           - service: auth-services
+            name: auth-services
             command: deploy src/index.ts --minify
           - service: crud-services
+            name: crud-services
             command: deploy src/index.ts --minify
           - service: marketplace-frontend
+            name: marketplace-frontend
             command: deploy worker/index.js
     
     steps:
@@ -54,7 +57,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: ${{ matrix.service }}
-          command: ${{ matrix.command }}
+          command: ${{ matrix.command }} --name ${{ matrix.name }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
